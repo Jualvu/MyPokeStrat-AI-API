@@ -6,7 +6,7 @@ const {
 
 const router = express.Router();
 
-router.route('/')
+router.route('/generateTeamAnyPokemon')
     .post(createPokemonTeam);
 
 module.exports = router;

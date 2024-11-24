@@ -1,11 +1,19 @@
 const express = require('express');
 const cors = require('cors');
+const dotenv = require("dotenv");
+require("dotenv").config();
+// const morgan = require("morgan");
+// const colors = require("colors");
+const errorHandler = require("./middleware/errorHandler");
+const connectDB = require("./config/db");
 
 //Load env
-require("dotenv").config();
 
 //Route files
-const pokemonAITeam = require('./routes/pokemonAIRoutes');
+const pokemonAITeamRoutes = require('./routes/pokemonAIRoutes');
+const pokemonRoutes = require('./routes/pokemonsRoutes');
+const userRoutes = require('./routes/usersRoutes');
+const ErrorResponse = require('./utils/errorResponse');
 
 //Create app
 const app = express();
@@ -16,15 +24,23 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'https://mypokestrat.netlify.app'],
+    origin: ['http://localhost:5173/', 'https://mypokestrat.netlify.app'],
     methods: ['POST']
   })
 )
 
 //Use routers
-app.use('/api/v1/pokemonAITeam', pokemonAITeam);
+app.use('/api/v1/pokemonAITeam', pokemonAITeamRoutes);
+app.use('/api/v1/pokemon', pokemonRoutes);
+app.use('/api/v1/user', userRoutes);
+
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
+
+app.use((req, res, next) => {
+  const error = new ErrorResponse("Could not find this route", 404);
+  throw error;
+})
 
 const port = process.env.PORT || 5000;
 
