@@ -24,7 +24,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ['http://localhost:5173/', 'https://mypokestrat.netlify.app'],
+    origin: ['http://localhost:5173', 'https://mypokestrat.netlify.app', 'https://mypokestrat.netlify.app/'],
     methods: ['POST']
   })
 )
@@ -37,10 +37,14 @@ app.use('/api/v1/user', userRoutes);
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
+//no route found error handler
 app.use((req, res, next) => {
-  const error = new ErrorResponse("Could not find this route", 404);
-  throw error;
+  return next(
+    new ErrorResponse("Could not find this route", 404)
+  );
 })
+
+
 
 const port = process.env.PORT || 5000;
 
