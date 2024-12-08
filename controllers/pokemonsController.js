@@ -1,13 +1,26 @@
 const Pokemon = require("../models/PokemonModel");
-
+const ErrorResponse = require("../utils/errorResponse");
+ 
 //@desc     Get all pokemon
 //@route    GET /api/v1/pokemon
 //@access   Public
-exports.getAllPokemon = (req, res, next) => {
-  res.status(200).json({
-    success: "True",
-    msg: "Show all pokemon",
-  });
+exports.getAllPokemon = async(req, res, next) => {
+
+  try{
+
+    const pokemons = await Pokemon.find();
+
+    res.status(200).json({
+      success: "True",
+      msg: "Show all pokemon",
+      count: pokemons.length,
+      data: pokemons
+    });
+
+  }catch(error){
+    return next(new ErrorResponse(`Server Error: ${error}`, 500));
+  }
+  
 };
 //@desc     Get single pokemon
 //@route    GET /api/v1/pokemon/:id
@@ -22,22 +35,55 @@ exports.getPokemon = (req, res, next) => {
 //@desc     Delete pokemon by id
 //@route    DELETE /api/v1/pokemon/:id
 //@access   Private
-exports.deletePokemon = (req, res, next) => {
-  res.status(200).json({
-    success: "True",
-    msg: `Delete pokemon: ${req.params.id}`,
-  });
+exports.deletePokemon = async(req, res, next) => {
+
+  try{
+
+    const deletedPokemon = await Pokemon.findByIdAndDelete(req.params.id);
+
+
+    res.status(200).json({
+      success: "True",
+      msg: `Delete pokemon: ${req.params.id}`,
+      data: deletedPokemon
+    });
+  }catch(error){
+    console.log(error);
+    return next(new ErrorResponse(`Server Error`, 500));
+  }
+  
 };
 
 //@desc     Create pokemon 
-//@route    POST /api/v1/pokemon/:id
+//@route    POST /api/v1/pokemon/
 //@access   Private
-exports.createPokemon = (req, res, next) => {
+exports.createPokemon = async(req, res, next) => {
 
-  const {} = req.body;
+  try{
+    const {pokemonId, pokemonName, pokemonTypes, pokemonImage } = req.body;
 
-  res.status(200).json({
-    success: "True",
-    msg: `Delete pokemon: ${req.params.id}`,
-  });
+    if(!pokemonId || !pokemonName || !pokemonTypes || !pokemonImage){
+      return next(new ErrorResponse(`Enter valid data`, 400));
+    }
+
+    const newPokemon = new Pokemon({
+      pokemonId, 
+      pokemonName, 
+      pokemonTypes, 
+      pokemonImage
+    });
+
+    const savedPokemon = await newPokemon.save();
+
+    res.status(200).json({
+      success: "True",
+      msg: `Succesfully created pokemon: ${req.body.pokemonName}`,
+      data: savedPokemon
+    });
+
+  }catch(error){
+    console.log(error);
+    return next(new ErrorResponse(`Server Error`, 500));
+  }
+  
 };

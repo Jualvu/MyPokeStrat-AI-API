@@ -12,8 +12,8 @@ const PokemonSchema = new mongoose.Schema({
     unique: true,
   },
   pokemonTypes: {
-    type: String,
-    required: [true, "Please add pokemon type"],
+    type: Array,
+    required: [true, "Please add pokemon type/s"],
   },
   pokemonImage: {
     type: String,
