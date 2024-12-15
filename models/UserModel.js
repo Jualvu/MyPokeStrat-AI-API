@@ -5,22 +5,18 @@ const UserSchema = new mongoose.Schema({
 
     username: {
         type: String,
-        required: [true, 'Please add a name'],
+        required: [true, 'Please add a name.'],
         unique: true,
         trim: true,
-        maxlength: [50, 'Name cannot be more than 50 characters']
+        maxlength: [50, 'Name cannot be more than 50 characters.']
     },
-    slug: String,
-    age: {
-        type: Number,
-        required: [true, 'Please add age'],
-        unique: false
-    },
-    country: {
+    password : {
         type: String,
-        required: false,
-        unique: false
+        required: [true, 'Please add a Password'],
+        trim: true,
+        minlength: [8, 'Password must be at least 8 characters long.']
     }
+
 
 });
 
