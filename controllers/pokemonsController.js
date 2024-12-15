@@ -61,16 +61,31 @@ exports.createPokemon = async(req, res, next) => {
 
   try{
     const {pokemonId, pokemonName, pokemonTypes, pokemonImage } = req.body;
+    // const {userId} = req.params.userId;
 
-    if(!pokemonId || !pokemonName || !pokemonTypes || !pokemonImage){
+    // if(!userId){
+    //   return next(new ErrorResponse(`User id is need it`, 400));
+    // }
+
+    if(!pokemonId || !pokemonName || !pokemonTypes || !pokemonImage ){
       return next(new ErrorResponse(`Enter valid data`, 400));
     }
+
+    // const isUserValid = false;
+    
+    // isUserValid = await User.find(userId);
+
+    // if(!isUserValid){
+    //   return next(new ErrorResposne('User not found.', 400));
+    // }
+
 
     const newPokemon = new Pokemon({
       pokemonId, 
       pokemonName, 
       pokemonTypes, 
       pokemonImage
+      // userId
     });
 
     const savedPokemon = await newPokemon.save();

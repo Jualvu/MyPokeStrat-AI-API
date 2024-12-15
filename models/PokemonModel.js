@@ -19,6 +19,7 @@ const PokemonSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add pokemon Image"]
   }
+  
 });
 
 module.exports = mongoose.model("Pokemon", PokemonSchema);
