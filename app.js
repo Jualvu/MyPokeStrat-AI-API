@@ -31,13 +31,13 @@ app.use(
 
 connectDB();
 
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
 //Use routers
 app.use('/api/v1/pokemonAITeam', pokemonAITeamRoutes);
 app.use('/api/v1/pokemon', pokemonRoutes);
 app.use('/api/v1/user', userRoutes);
 
-
-app.get("/", (req, res) => res.send("Express on Vercel"));
 
 //no route found error handler
 app.use((req, res, next) => {
