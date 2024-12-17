@@ -27,7 +27,7 @@ app.use(
     origin: ['http://localhost:5173', 'https://mypokestrat.netlify.app'],
     methods: ['POST', 'DELETE', 'GET']
   })
-)
+);
 
 connectDB();
 
